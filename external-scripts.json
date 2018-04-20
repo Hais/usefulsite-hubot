@@ -1,0 +1,15 @@
+[
+  "hubot-diagnostics",
+  "hubot-help",
+  "hubot-pugme",
+  "hubot-maps",
+  "hubot-redis-brain",
+  "hubot-rules",
+  "hubot-shipit",
+  "hubot-markov",
+  "hubot-business-cat",
+  "hubot-factoids",
+  "hubot-voting",
+  "hubot-plusplus-improved",
+  "hubot-outofcontext"
+]
