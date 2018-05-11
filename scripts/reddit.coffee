@@ -23,6 +23,8 @@
 
 redditFilter = /reddit|gold|comment|thread|karma|serious|username|\/r\//i
 
+querystring = require 'querystring'
+
 module.exports = (robot) ->
 
   pickChild = (children) ->
@@ -38,6 +40,20 @@ module.exports = (robot) ->
       return if children.length < 10
       child = pickChild(children)
       child = pickChild(children) while child.data.title.match filter
+      callback child
+
+  searchGif = (term, callback) ->
+    query = 
+      q: "#{term} site:imgur.com url:gifv"
+      include_over_18: "on"
+      sort: "top"
+    robot.http("https://www.reddit.com/r/all/search.json?" + querystring.stringify(query))
+    .get() (err, res, body) ->
+      return if err
+      response = JSON.parse(body)
+      children = response.data.children
+      return if children.length < 10
+      child = pickChild(children)
       callback child
 
   robot.respond /[\/]?r\/(.+)/i, (msg) ->
@@ -106,6 +122,10 @@ module.exports = (robot) ->
 
   robot.respond /aww/i, (msg) ->
     query "aww", null, (item) ->
+      msg.send item.data.title + "\n" + item.data.url
+
+  robot.respond /gif (.+)/i, (msg) ->
+    searchGif msg.match[1], (item) ->
       msg.send item.data.title + "\n" + item.data.url
 
 
